@@ -29,6 +29,16 @@ String _getEasyFridaPluginPath() {
   return '$fridaPath\\scripts\\plugins.list';
 }
 
+String _getAdbPath() {
+  String toolPath = _getToolPath();
+  return '$toolPath\\adb.exe';
+}
+
+String _getFridaServerPath() {
+  String toolPath = _getToolPath();
+  return '$toolPath\\frida-server-16.1.4-android-';
+}
+
 const extractBadgingCommand = 'dump badging';
 const extractManifestCommand = 'dump xmltree --file AndroidManifest.xml';
 const extractResourcesCommand = 'dump resources';
@@ -43,6 +53,21 @@ const easyFridaSpawnCommand = '-f';
 const easyFridaAttachCommand = '-p';
 const easyFridaPluginCommand = '-l';
 const easyFridaLogCommand = '-o';
+
+final toolPath = _getToolPath();
+
+final adbPath = _getAdbPath();
+const adbRootCommand = 'shell su -c';
+const adbCheckInstalledCommand = 'pm list package';
+const adbInstallCommand = 'install';
+const adbUnameCommand = 'uname -a';
+const adbFridaServer = '/data/local/tmp/fs_wxjzc';
+const adbUploadCommand = 'push';
+const adbCheckFSCommand = 'test -f /data/local/tmp/fs_wxjzc && echo 1 || echo 0';
+
+final fsPath = _getFridaServerPath();
+
+
 const logDirPath = './logs';
 const logFilePath = '$logDirPath/app.log';
 

@@ -262,4 +262,8 @@ class GetApkInfo {
     return apkinfo.metaData!;
   }
 
+  String getApkPath(){
+    return apkinfo.apkPath ?? '';
+  } 
+
 }

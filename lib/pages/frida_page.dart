@@ -26,6 +26,7 @@ class _FridaPageState extends State<FridaPage> {
   bool _isSpawn = true;
   String appName = '';
   String packageName = '';
+  String apkPath = '';
 
   List<String> outputContent = [];
 
@@ -41,6 +42,7 @@ class _FridaPageState extends State<FridaPage> {
     Map<String, String> basicInfo = appState.apkParser!.getBasicInfo();
     appName = basicInfo['appName']!;
     packageName = basicInfo['packageName']!;
+    apkPath = appState.apkParser!.getApkPath();
     return Scaffold(
       body: Row(
         children: [
@@ -229,30 +231,51 @@ class _FridaPageState extends State<FridaPage> {
     cmd.add(easyFridaLogCommand);
     cmd.add(logDirPath);
     myLogger.i("构建easyFrida命令：${cmd.map((e) => e).join(' ')}");
+    bool hasFs = await checkFridaServer();
+    bool installed = await checkInstalled(packageName);
+    if (!installed) {
+      myLogger.d("APK未安装");
+      setState(() {
+        outputContent.add("APK未安装\n开始安装");
+      });
+      if (!await installApk(apkPath)) {
+        myLogger.e("安装失败");
+        setState(() {
+          outputContent.add("安装失败\n");
+        });
+        return;
+      }
+    }
+    if (!hasFs) {
+      setState(() {
+          outputContent.add("上传frida-server\n");
+        });
+      await uploadFridaServer();
+    }
+    await runFridaServer();
     final process = await LocalProcessManager().start(cmd);
     pid = process.pid;
     // 实时捕获标准输出
-  process.stdout.transform(gbk.decoder).listen((data) {
-    setState(() {
-      if(outputContent.length > 500){
-        outputContent.removeAt(0);
-      }
-      outputContent.add(data);
+    process.stdout.transform(gbk.decoder).listen((data) {
+      setState(() {
+        if (outputContent.length > 500) {
+          outputContent.removeAt(0);
+        }
+        outputContent.add(data);
+      });
     });
-  });
-  
-  // 实时捕获错误输出
-  process.stderr.transform(gbk.decoder).listen((data) {
-    setState(() {
-      outputContent.add(data);
-    });
-  });
-// 等待进程结束
-  final exitCode = await process.exitCode;
-  setState(() {
-    outputContent.add('进程结束，退出码: $exitCode');
-  });
 
+    // 实时捕获错误输出
+    process.stderr.transform(gbk.decoder).listen((data) {
+      setState(() {
+        outputContent.add(data);
+      });
+    });
+    // 等待进程结束
+    final exitCode = await process.exitCode;
+    setState(() {
+      outputContent.add('进程结束，退出码: $exitCode');
+    });
   }
 
   // 按钮2点击事件
