@@ -11,6 +11,7 @@ class ApkInfo {
   String? targetSdkVersion;
   String? compileSdkVersion;
   String? launcherActivity;
+  String? packedInfo;
   List<String>? permissions;
   List<String>? activities;
   List<String>? services;
@@ -31,6 +32,7 @@ class ApkInfo {
     this.targetSdkVersion,
     this.compileSdkVersion,
     this.launcherActivity,
+    this.packedInfo,
     this.permissions,
     this.activities,
     this.services,
@@ -52,6 +54,7 @@ class ApkInfo {
     targetSdkVersion = json['targetSdkVersion'];
     compileSdkVersion = json['compileSdkVersion'];
     launcherActivity = json['launcherActivity'];
+    packedInfo = json['packedInfo'];
     permissions = json['permissions']?.cast<String>();
     activities = json['activities']?.cast<String>();
     services = json['services']?.cast<String>();
@@ -76,6 +79,7 @@ class ApkInfo {
     data['targetSdkVersion'] = targetSdkVersion;
     data['compileSdkVersion'] = compileSdkVersion;
     data['launcherActivity'] = launcherActivity;
+    data['packedInfo'] = packedInfo;
     data['permissions'] = permissions;
     data['activities'] = activities;
     data['services'] = services;

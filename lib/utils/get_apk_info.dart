@@ -173,6 +173,7 @@ class GetApkInfo {
     apkinfo.targetSdkVersion = targetSdkVersionMatch?.group(1) ?? '解析失败';
     apkinfo.compileSdkVersion = compileSdkVersionMatch?.group(1) ?? '解析失败';
     apkinfo.launcherActivity = launcherActivityMatch?.group(1) ?? '解析失败';
+    apkinfo.packedInfo = _getPackedInfo(apkPath);
     apkinfo.permissions = permissionsMatches.map((m) => m.group(1)!).toList();
     apkinfo.activities = activitiesMatches.map((m) => m.group(1)!).toList();
     apkinfo.services = servicesMatches.map((m) => m.group(1)!).toList();
@@ -248,6 +249,7 @@ class GetApkInfo {
       'versionCode': apkinfo.versionCode!,
       'versionName': apkinfo.versionName!,
       'apkSize': apkinfo.apkSize!,
+      'packedInfo': apkinfo.packedInfo!,
       'minSdkVersion': apkinfo.minSdkVersion!,
       'targetSdkVersion': apkinfo.targetSdkVersion!,
       'compileSdkVersion': apkinfo.compileSdkVersion!,
@@ -265,5 +267,33 @@ class GetApkInfo {
   String getApkPath(){
     return apkinfo.apkPath ?? '';
   } 
+
+  String _getPackedInfo(String apkPath){
+    List<String> fileList = getFileList(apkPath);
+    String packed = "";
+    bool flag = false;
+    for(String filePath in fileList){
+      String fileName = filePath;
+      if(filePath.contains("/")){
+        fileName = filePath.split("/").last;
+      }
+      packedInfo.forEach((key,value){
+        if(flag){
+          return;
+        }
+        value.forEach((name,fileList){
+          if(flag){
+            return;
+          }
+          if(fileList.contains(filePath)||fileList.contains(fileName)){ //不考虑正则匹配，其余特征以及足够了
+            flag = true;
+            packed = key;
+          }
+        });
+      });
+
+    }
+    return packed;
+  }
 
 }

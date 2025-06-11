@@ -36,6 +36,7 @@ class DescriptionList extends StatelessWidget {
           Column(
             crossAxisAlignment: alignment,
             children: [
+              SizedBox(height: itemSpacing),
               _DescriptionItemWidget(
                 title: items[i].title,
                 value: items[i].value,

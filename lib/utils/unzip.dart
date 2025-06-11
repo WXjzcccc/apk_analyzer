@@ -2,8 +2,11 @@ import 'package:apk_analyzer/utils/my_logger.dart';
 import 'package:archive/archive.dart';
 import 'dart:io';
 
-
-Future<String> extractFileWithZip(String apkPath, String resourcePath, String outputPath) async {
+Future<String> extractFileWithZip(
+  String apkPath,
+  String resourcePath,
+  String outputPath,
+) async {
   if (resourcePath.startsWith('/')) {
     resourcePath = resourcePath.substring(1);
   }
@@ -23,5 +26,30 @@ Future<String> extractFileWithZip(String apkPath, String resourcePath, String ou
   } catch (e) {
     myLogger.e('解压失败: $e');
     return '';
+  }
+}
+
+List<String> getFileList(String apkPath) {
+  try {
+    var bytes = File(apkPath).readAsBytesSync();
+    var archive = ZipDecoder().decodeBytes(bytes);
+    List<String> fileList = [];
+    for (var file in archive) {
+      if (file.isFile) {
+        if (file.name.endsWith(".so") ||
+            file.name.endsWith(".dex") ||
+            file.name.endsWith(".jar") ||
+            file.name.endsWith(".dat") ||
+            file.name.endsWith(".bin") ||
+            file.name.startsWith("assets") ||
+            file.name.startsWith("lib")) {
+          fileList.add(file.name);
+        }
+      }
+    }
+    return fileList;
+  } catch (e) {
+    myLogger.e('获取apk文件列表失败: $e');
+    return [];
   }
 }

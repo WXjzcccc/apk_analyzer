@@ -21,16 +21,11 @@ class _ApkInfoPageState extends State<ApkInfoPage> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Column(
-          children: [
-            // 上半区：描述列表和图标
-            Image.file(File(basicInfo['iconPath']!), width: 64, height: 64),
-            _buildDescriptionSection(basicInfo),
-            const SizedBox(height: 12),
-            // 下半区：可切换表格
-            // Expanded(
-            //   child: _buildTableSection(),
-            // ),
+          child: Column(
+            children: [
+              // 描述列表和图标
+              Image.file(File(basicInfo['iconPath']!), width: 64, height: 64),
+              _buildDescriptionSection(basicInfo),
           ],
         ),
       ),
@@ -67,6 +62,10 @@ class _ApkInfoPageState extends State<ApkInfoPage> {
         Icon(Icons.code),
       ),
       DescriptionItem2(
+        '加固信息',
+        basicInfo['packedInfo']!,
+        Icon(Icons.indeterminate_check_box)),
+      DescriptionItem2(
         '最小SDK',
         basicInfo['minSdkVersion']!,
         Icon(Icons.code),
@@ -83,11 +82,12 @@ class _ApkInfoPageState extends State<ApkInfoPage> {
       ),
     ];
     return Expanded(
-      child: 
-          DescriptionList(
+      child: SingleChildScrollView(
+        child: DescriptionList(
             items: descriptionItems.toList(),
-            itemSpacing: 16,
+            itemSpacing: 10,
           ),
+      ),
     );
   }
 }

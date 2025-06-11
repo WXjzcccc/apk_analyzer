@@ -163,8 +163,8 @@ class _FridaPageState extends State<FridaPage> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: SingleChildScrollView(
-                        child: RichText(
-                          text: TextSpan(
+                        child: SelectableText.rich(
+                          TextSpan(
                             style: DefaultTextStyle.of(context).style,
                             children: _buildRichTextSpans(),
                           ),
@@ -190,12 +190,12 @@ class _FridaPageState extends State<FridaPage> {
     return [
       TextSpan(
         text: outputContent.map((e) => e).join(''),
-        style: const TextStyle(color: Colors.black),
+        style: const TextStyle(color: Colors.blueAccent),
       ),
     ];
   }
 
-  // 按钮1点击事件
+  // 启动frida
   Future<void> _startEasyFrida() async {
     final selectedItems = plugins.where((item) => item['selected']).toList();
     if (selectedItems.isEmpty) {
@@ -278,7 +278,7 @@ class _FridaPageState extends State<FridaPage> {
     });
   }
 
-  // 按钮2点击事件
+  // 终止frida进程
   void _killEasyFrida() {
     LocalProcessManager().killPid(pid);
   }

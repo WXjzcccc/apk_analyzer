@@ -1,3 +1,4 @@
+import 'package:apk_analyzer/pages/about_page.dart';
 import 'package:apk_analyzer/pages/apk_info_page.dart';
 import 'package:apk_analyzer/pages/apk_table_page.dart';
 import 'package:apk_analyzer/pages/frida_page.dart';
@@ -80,28 +81,18 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     var colorScheme = Theme.of(context).colorScheme;
 
-    Widget page;
-    switch (selectedIndex) {
-      case 0:
-        page = ApkInfoPage();
-        break;
-      case 1:
-        page = ApkTablePage();
-        break;
-      case 2:
-        page = FridaPage();
-        break;
-      default:
-        throw UnimplementedError('no widget for $selectedIndex');
-    }
+    final List<Widget> _pages = [
+    ApkInfoPage(key: ValueKey('ApkInfoPage')),
+    ApkTablePage(key: ValueKey('ApkTablePage')),
+    FridaPage(key: ValueKey('FridaPage')),
+    AboutPage(key: ValueKey('AboutPage')),
+  ];
 
-    // The container for the current page, with its background color
-    // and subtle switching animation.
     var mainArea = ColoredBox(
       color: colorScheme.surfaceVariant,
-      child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 200),
-        child: page,
+      child: IndexedStack( //防止切换页面时已有内容丢失
+        index: selectedIndex,
+        children: _pages,
       ),
     );
 
@@ -129,6 +120,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     NavigationRailDestination(
                       icon: Icon(Icons.code),
                       label: Text("Frida功能")
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.window_sharp),
+                      label: Text("关于软件")
                     ),
                   ],
                   selectedIndex: selectedIndex,
