@@ -107,14 +107,6 @@ class _ApkInputPageState extends State<ApkInputPage> {
                           color: _isFileSelected ? Colors.green[800] : Colors.blue[800],
                         ),
                       ),
-                      if (!_isFileSelected)
-                        Text(
-                          '或点击选择文件',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.blue[600],
-                          ),
-                        ),
                     ],
                   ),
                 )

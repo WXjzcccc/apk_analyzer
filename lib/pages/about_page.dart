@@ -117,6 +117,6 @@ class AboutPage extends StatelessWidget {
   }
 
   String _getAppVersion() {
-    return '0.4.0';
+    return '0.5.0';
   }
 }
