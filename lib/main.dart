@@ -2,6 +2,7 @@ import 'package:apk_analyzer/pages/about_page.dart';
 import 'package:apk_analyzer/pages/apk_info_page.dart';
 import 'package:apk_analyzer/pages/apk_table_page.dart';
 import 'package:apk_analyzer/pages/frida_page.dart';
+import 'package:apk_analyzer/utils/frida.dart';
 import 'package:apk_analyzer/utils/get_apk_info.dart';
 import 'package:apk_analyzer/utils/my_logger.dart';
 import 'package:chinese_font_library/chinese_font_library.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    downloadServer();
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(

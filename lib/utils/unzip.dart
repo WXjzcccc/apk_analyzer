@@ -53,3 +53,18 @@ List<String> getFileList(String apkPath) {
     return [];
   }
 }
+
+Future<bool> extractFileWithXZ(String filePath,String outputFilePath) async {
+  try {
+    var bytes = File(filePath).readAsBytesSync();
+    var archive = XZDecoder().decodeBytes(bytes);
+    var outputFile = File(outputFilePath);
+    await outputFile.create(recursive: true);
+    await outputFile.writeAsBytes(archive as List<int>);
+    myLogger.d('解压: $filePath成功');
+    return true;
+  } catch (e) {
+    myLogger.e('解压失败: $e');
+    return false;
+  }
+}

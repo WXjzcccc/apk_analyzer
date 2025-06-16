@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:apk_analyzer/utils/consts.dart';
+import 'package:apk_analyzer/utils/files.dart';
 import 'package:apk_analyzer/utils/my_logger.dart';
+import 'package:apk_analyzer/utils/unzip.dart';
+import 'package:background_downloader/background_downloader.dart';
 import 'package:process_run/process_run.dart';
 
 List<Map<String,dynamic>> getPlugins(){
@@ -121,4 +124,28 @@ Future<bool> checkFridaServer() async {
       myLogger.e('执行命令失败: $e');
       return false;
     }
+}
+
+Future<void> downloadServer() async {
+  for(String cpu in ["x86_64","arm64"]){
+    if(!checkFileExists("$fsPath$cpu")){
+      String fsDownloadUrl = "$fridaServerDownloadUrl$cpu.xz";
+      myLogger.d("开始下载$fridaServerDownloadUrl$cpu.xz,目标路径:$localPath\\temp");
+      final task = DownloadTask(url: fsDownloadUrl,
+      filename: "$fridaServerName$cpu.xz",
+      directory: "$localPath\\temp");
+      final result = await FileDownloader().download(task);
+      switch (result.status){
+        case TaskStatus.complete:
+          myLogger.d('下载成功');
+          await extractFileWithXZ("$tempDirPath/$fridaServerName$cpu.xz", "$fsPath$cpu");
+        case TaskStatus.canceled:
+          myLogger.d('下载被取消');
+        case TaskStatus.paused:
+          myLogger.d('下载被暂停');
+        default:
+          myLogger.d('下载失败');
+      } 
+    }
+  }
 }

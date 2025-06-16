@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:apk_analyzer/utils/files.dart';
 
 String _getToolPath() {
@@ -36,8 +38,13 @@ String _getAdbPath() {
 
 String _getFridaServerPath() {
   String toolPath = _getToolPath();
-  return '$toolPath\\frida-server-16.1.4-android-';
+  return '$toolPath\\$fridaServerName';
 }
+
+String localPath = Platform.resolvedExecutable.replaceAll(Platform.executable, '').replaceAll("\\build\\windows\\x64\\runner\\Debug", "");
+
+const fridaServerName = "frida-server-16.1.4-android-";
+const fridaServerDownloadUrl = "https://github.com/frida/frida/releases/download/16.1.4/$fridaServerName";
 
 const extractBadgingCommand = 'dump badging';
 const extractManifestCommand = 'dump xmltree --file AndroidManifest.xml';

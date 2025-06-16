@@ -51,6 +51,10 @@ class AboutPage extends StatelessWidget {
             _buildInfoItem(Icons.person, 'WXjzc', 'https://www.github.com/wxjzcccc', isLink: true),
             const SizedBox(height: 24),
 
+            _buildSectionTitle('感谢'),
+            _buildInfoItem(Icons.link, 'ApkCheckPack（加固特征支持）', 'https://github.com/moyuwa/ApkCheckPack', isLink: true),
+            const SizedBox(height: 24),
+
             _buildSectionTitle('开源许可'),
             const Text(
               '本项目基于LGPL-2.1开源协议发布\n'
