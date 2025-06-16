@@ -66,6 +66,10 @@ class _ApkInfoPageState extends State<ApkInfoPage> {
         basicInfo['packedInfo']!,
         Icon(Icons.indeterminate_check_box)),
       DescriptionItem2(
+        '框架信息',
+        basicInfo['builtInfo']!,
+        Icon(Icons.add_box)),
+      DescriptionItem2(
         '最小SDK',
         basicInfo['minSdkVersion']!,
         Icon(Icons.code),

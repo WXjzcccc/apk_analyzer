@@ -174,6 +174,7 @@ class GetApkInfo {
     apkinfo.compileSdkVersion = compileSdkVersionMatch?.group(1) ?? '解析失败';
     apkinfo.launcherActivity = launcherActivityMatch?.group(1) ?? '解析失败';
     apkinfo.packedInfo = _getPackedInfo(apkPath);
+    apkinfo.builtInfo = _getBuiltInfo(apkPath);
     apkinfo.permissions = permissionsMatches.map((m) => m.group(1)!).toList();
     apkinfo.activities = activitiesMatches.map((m) => m.group(1)!).toList();
     apkinfo.services = servicesMatches.map((m) => m.group(1)!).toList();
@@ -250,6 +251,7 @@ class GetApkInfo {
       'versionName': apkinfo.versionName!,
       'apkSize': apkinfo.apkSize!,
       'packedInfo': apkinfo.packedInfo!,
+      'builtInfo': apkinfo.builtInfo!,
       'minSdkVersion': apkinfo.minSdkVersion!,
       'targetSdkVersion': apkinfo.targetSdkVersion!,
       'compileSdkVersion': apkinfo.compileSdkVersion!,
@@ -285,7 +287,7 @@ class GetApkInfo {
           if(flag){
             return;
           }
-          if(fileList.contains(filePath)||fileList.contains(fileName)){ //不考虑正则匹配，其余特征以及足够了
+          if(fileList.contains(filePath)||fileList.contains(fileName)){ //不考虑正则匹配，其余特征已经足够了
             flag = true;
             packed = key;
           }
@@ -294,6 +296,34 @@ class GetApkInfo {
 
     }
     return packed;
+  }
+
+  String _getBuiltInfo(String apkPath){
+    List<String> fileList = getFileList(apkPath);
+    String built = "原生或未知框架";
+    bool flag = false;
+    for(String filePath in fileList){
+      String fileName = filePath;
+      if(filePath.contains("/")){
+        fileName = filePath.split("/").last;
+      }
+      builtInfo.forEach((key,value){
+        if(flag){
+          return;
+        }
+        value.forEach((name,fileList){
+          if(flag){
+            return;
+          }
+          if(fileList.contains(filePath)||fileList.contains(fileName)){
+            flag = true;
+            built = key;
+          }
+        });
+      });
+
+    }
+    return built;
   }
 
 }

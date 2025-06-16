@@ -1282,3 +1282,33 @@ const packedInfo = { //自己之前存特征的数据库不小心删了，这里
     ]
   }
 };
+
+
+const builtInfo = {
+  "Flutter-可使用Blutter反编译": { 
+    "soPath": [
+      "lib/armeabi-v7a/libflutter.so",
+      "lib/arm64-v8a/libflutter.so",
+      "lib/x86/libflutter.so",
+      "lib/x86_64/libflutter.so"
+    ],
+    "soName" :[],
+  },
+  "Xamarin-可使用pyxamstore反编译": {
+    "soPath": [
+      "lib/armeabi-v7a/libxamarin-app.so",
+      "lib/arm64-v8a/libxamarin-app.so",
+      "lib/x86/libxamarin-app.so",
+      "lib/x86_64/libxamarin-app.so"
+    ],
+    "soName": [],
+  },
+  "Uni-App-常规反编译即可": {
+    "soPath": [],
+    "soName": [
+      "app-service.js",
+      "app-config.js",
+      "app-view.js",
+    ],
+  }
+};
