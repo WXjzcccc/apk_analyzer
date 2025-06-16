@@ -270,7 +270,7 @@ class GetApkInfo {
 
   String _getPackedInfo(String apkPath){
     List<String> fileList = getFileList(apkPath);
-    String packed = "";
+    String packed = "未加固或未知加固";
     bool flag = false;
     for(String filePath in fileList){
       String fileName = filePath;

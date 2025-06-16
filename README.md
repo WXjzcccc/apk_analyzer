@@ -12,6 +12,14 @@
 
 ![alt text](readme_imgs/image-3.png)
 
+![alt text](readme_imgs/image-4.png)
+
+![alt text](readme_imgs/image-5.png)
+
+![alt text](readme_imgs/image-6.png)
+
+![alt text](readme_imgs/image-7.png)
+
 # 提示
 
-由于frida-server文件过大，因此不上传至仓库，请自己下载x86_64和arm64的server后解压放置在win_tools目录下再编译，release中提供的内容不受影响
+软件会自动从github下载frida-server-16.1.4，如果下载失败，请手动下载并解压至win_tools目录中
