@@ -17,6 +17,7 @@ class ApkTablePage extends StatefulWidget {
 class _ApkTablePageState extends State<ApkTablePage> {
   // 当前选中的表格数据索引
   int _currentTableIndex = 0;
+  String searchText = "";
 
   MyTableData setPermission(GetApkInfo apkParser){
     Map<String,List<List<String>>> permissions =apkParser.getPermission();
@@ -111,6 +112,16 @@ class _ApkTablePageState extends State<ApkTablePage> {
     return t;
   }
 
+  List<MyTableRow> getTableData(List<MyTableRow> rows, String searchText) {
+    if (searchText.isEmpty) {
+      return rows; // 如果搜索文本为空，返回所有行
+    }
+    return rows.where((row) {
+      // 检查行中的每个单元格是否包含搜索文本
+      return row.cells.any((cell) => cell.toLowerCase().contains(searchText.toLowerCase()));
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>(); //从MyAppState中获取成员
@@ -172,10 +183,21 @@ class _ApkTablePageState extends State<ApkTablePage> {
             constraints: BoxConstraints.expand(),
             child: MyDataTable(
               headers: tableDataList[_currentTableIndex].headers,
-              rows: tableDataList[_currentTableIndex].rows,
+              rows: getTableData(tableDataList[_currentTableIndex].rows,searchText),
             ),
           ),
         ),
+        TextField(
+            decoration: InputDecoration(
+              labelText: '搜索',
+              border: OutlineInputBorder(),
+            ),
+            onChanged: (value) {
+              setState(() {
+                searchText = value;
+              });
+            },
+          )
       ],
     );
     }catch(e){
