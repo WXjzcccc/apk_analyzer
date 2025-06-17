@@ -3,6 +3,7 @@ import 'package:apk_analyzer/utils/consts.dart';
 import 'package:apk_analyzer/utils/frida.dart';
 import 'package:apk_analyzer/utils/my_logger.dart';
 import 'package:apk_analyzer/widgets/dialog_widget.dart';
+import 'package:apk_analyzer/widgets/text_search_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:process/process.dart';
@@ -92,7 +93,6 @@ class _FridaPageState extends State<FridaPage> {
               ),
             ),
           ),
-
           // 右侧输入框和按钮区域
           Expanded(
             flex: 3,
@@ -150,9 +150,24 @@ class _FridaPageState extends State<FridaPage> {
                   const SizedBox(height: 16),
 
                   // 富文本展示区域
-                  const Text(
-                    '输出内容:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Row(
+                    children: [
+                      const Text(
+                        '输出内容:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Expanded(
+                        child: IconButton(
+                        icon: const Icon(Icons.search),
+                        onPressed: () {
+                          showSearch(
+                            context: context,
+                            delegate: TextSearchDelegate(outputContent.map((e) => e).join('')),
+                          );
+                        },
+                      ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 8),
                   Expanded(
@@ -236,7 +251,7 @@ class _FridaPageState extends State<FridaPage> {
     if (!installed) {
       myLogger.d("APK未安装");
       setState(() {
-        outputContent.add("APK未安装\n开始安装");
+        outputContent.add("APK未安装\n开始安装\n");
       });
       if (!await installApk(apkPath)) {
         myLogger.e("安装失败");
