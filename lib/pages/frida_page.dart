@@ -28,6 +28,7 @@ class _FridaPageState extends State<FridaPage> {
   String appName = '';
   String packageName = '';
   String apkPath = '';
+  bool isRun = false;
 
   List<String> outputContent = [];
 
@@ -134,14 +135,14 @@ class _FridaPageState extends State<FridaPage> {
                       ),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: _startEasyFrida,
+                          onPressed: isRun ? null : _startEasyFrida,
                           child: const Text('开始'),
                         ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: _killEasyFrida,
+                          onPressed: isRun ? _killEasyFrida : null,
                           child: const Text('停止'),
                         ),
                       ),
@@ -212,9 +213,15 @@ class _FridaPageState extends State<FridaPage> {
 
   // 启动frida
   Future<void> _startEasyFrida() async {
+    setState(() {
+      isRun = true;
+    });
     final selectedItems = plugins.where((item) => item['selected']).toList();
     if (selectedItems.isEmpty) {
       MyDialog(context, '警告', '至少选择一项功能');
+      setState(() {
+        isRun = false;
+      });
       return;
     }
     final selectedPlugins = selectedItems.map((e) => e['title']).join(',');
@@ -222,6 +229,9 @@ class _FridaPageState extends State<FridaPage> {
         (selectedPlugins.contains("equals") ||
             selectedPlugins.contains("strcmp"))) {
       MyDialog(context, '警告', 'tracer和equals、strcmp不能同时使用');
+      setState(() {
+        isRun = false;
+      });
       return;
     }
     final className = _classNameController.text;
@@ -257,6 +267,7 @@ class _FridaPageState extends State<FridaPage> {
         myLogger.e("安装失败");
         setState(() {
           outputContent.add("安装失败\n");
+          isRun = false;
         });
         return;
       }
@@ -290,11 +301,15 @@ class _FridaPageState extends State<FridaPage> {
     final exitCode = await process.exitCode;
     setState(() {
       outputContent.add('进程结束，退出码: $exitCode');
+      isRun = false;
     });
   }
 
   // 终止frida进程
   void _killEasyFrida() {
     LocalProcessManager().killPid(pid);
+    setState(() {
+      isRun = false;
+    });
   }
 }

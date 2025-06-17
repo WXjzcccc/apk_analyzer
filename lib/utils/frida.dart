@@ -100,7 +100,7 @@ Future<void> uploadFridaServer() async {
 Future<void> runFridaServer() async {
   var shell = Shell(stdoutEncoding: utf8, verbose: false);
     try {
-      var command = '$adbPath $adbRootCommand "$adbFridaServer&"';
+      var command = '$adbPath $adbRootCommand "nohup $adbFridaServer > /sdcard/apk_analyzer.log 2>&1 &"';
       myLogger.i('执行命令: $command');
       await shell.run(command);
     } catch (e) {
