@@ -1,8 +1,11 @@
 import 'package:apk_analyzer/entity/apk_info.dart';
 import 'package:apk_analyzer/utils/consts.dart';
+import 'package:apk_analyzer/utils/files.dart';
 import 'package:apk_analyzer/utils/hashes.dart';
 import 'package:apk_analyzer/utils/my_logger.dart';
 import 'package:apk_analyzer/utils/unzip.dart';
+import 'package:crypto/crypto.dart';
+import 'package:pkcs7/pkcs7.dart';
 import 'package:process_run/process_run.dart';
 import 'dart:io';
 import 'dart:convert';
@@ -10,9 +13,11 @@ import 'dart:convert';
 
 class GetApkInfo {
   ApkInfo apkinfo = ApkInfo();
+  List<String> fileList = [];
 
   GetApkInfo(String apkPath) {
     apkinfo.apkPath = apkPath;
+    fileList = getFileList(apkPath);
   }
 
   Future<String> _runAapt2(String apkPath, int type, [String arg = '']) async {
@@ -85,7 +90,7 @@ class GetApkInfo {
       String iconPath = iconMatch.group(1) ?? '';
       if (iconPath.isNotEmpty) {
         myLogger.i('找到图标信息: $iconPath');
-        String path = await extractFileWithZip(apkPath, iconPath, '$tempDirPath/${apkinfo.id}');
+        String path = extractFileWithZip(apkPath, iconPath, '$tempDirPath/${apkinfo.id}');
         if (path.isNotEmpty) {
           apkinfo.iconPath = path;
           myLogger.i('图标路径设置成功: ${apkinfo.iconPath}');
@@ -173,8 +178,8 @@ class GetApkInfo {
     apkinfo.targetSdkVersion = targetSdkVersionMatch?.group(1) ?? '解析失败';
     apkinfo.compileSdkVersion = compileSdkVersionMatch?.group(1) ?? '解析失败';
     apkinfo.launcherActivity = launcherActivityMatch?.group(1) ?? '解析失败';
-    apkinfo.packedInfo = _getPackedInfo(apkPath);
-    apkinfo.builtInfo = _getBuiltInfo(apkPath);
+    apkinfo.packedInfo = _getPackedInfo();
+    apkinfo.builtInfo = _getBuiltInfo();
     apkinfo.permissions = permissionsMatches.map((m) => m.group(1)!).toList();
     apkinfo.activities = activitiesMatches.map((m) => m.group(1)!).toList();
     apkinfo.services = servicesMatches.map((m) => m.group(1)!).toList();
@@ -270,8 +275,7 @@ class GetApkInfo {
     return apkinfo.apkPath ?? '';
   } 
 
-  String _getPackedInfo(String apkPath){
-    List<String> fileList = getFileList(apkPath);
+  String _getPackedInfo(){
     String packed = "未加固或未知加固";
     bool flag = false;
     for(String filePath in fileList){
@@ -298,8 +302,7 @@ class GetApkInfo {
     return packed;
   }
 
-  String _getBuiltInfo(String apkPath){
-    List<String> fileList = getFileList(apkPath);
+  String _getBuiltInfo(){
     String built = "原生或未知框架";
     bool flag = false;
     for(String filePath in fileList){
@@ -324,6 +327,61 @@ class GetApkInfo {
 
     }
     return built;
+  }
+
+  Map<String,dynamic> getCertInfo() {
+    for(String filePath in fileList){
+      if(filePath.startsWith("META-INF") && (filePath.endsWith(".RSA") || filePath.endsWith(".DSA"))){
+        String certFilePath = extractFileWithZip(apkinfo.apkPath!, filePath, '$tempDirPath/${apkinfo.id}');
+        if(checkFileExists(certFilePath)) {
+          return readPkcs7Certificate(certFilePath);
+        }else{
+          myLogger.e("证书文件不存在: $certFilePath");
+        }
+      }
+    }
+    return {};
+  }
+
+  Map<String, dynamic> readPkcs7Certificate(String filePath) {
+    File certFile = File(filePath);
+    Map<String, dynamic> certInfo = {};
+    var derData = certFile.readAsBytesSync();
+    var cert = Pkcs7.fromDer(derData);
+    certInfo['版本'] = cert.version;
+    certInfo['内容类型'] = cert.contentType.objectIdentifierAsString;
+    certInfo['证书列表'] = [];
+    certInfo['签名列表'] = [];
+    for (var certificate in cert.certificates) {
+      Map<String, dynamic> certData = {};
+      certData['版本'] = certificate.version.toString();
+      certData['序列号'] = certificate.serialNumber.toString();
+      certData['主题'] = certificate.subject.toList().map((e) => "${e.key.readableName}=${e.value}").join(', ');
+      certData['颁发者'] = certificate.issuer.toList().map((e) => "${e.key.readableName}=${e.value}").join(', ');
+      certData['序列号'] = certificate.serialNumber.toString();
+      certData['有效期始'] = certificate.notBefore.toString();
+      certData['有效期至'] = certificate.notAfter.toString();
+      certData['指纹'] = certificate.fingerprint.toString();
+      certData['签名算法'] = certificate.digestAlgorithmID.name;
+      certData['RSA-e'] = certificate.publicKey.publicExponent.toString();
+      certData['RSA-n'] = certificate.publicKey.n.toString();
+      certInfo['证书列表'].add(certData);
+    }
+    for (var signerInfo in cert.signerInfo) {
+      Map<String, dynamic> signData = {};
+      signData['版本'] = signerInfo.version.toString();
+      signData['序列号'] = signerInfo.serial.toString();
+      signData['签名算法'] = signerInfo.digestAlgorithmID.name;
+      final sha_256 = sha256.convert(cert.certificates.last.der);
+      final sha_1 = sha1.convert(cert.certificates.last.der);
+      final md_5 = md5.convert(cert.certificates.last.der);
+      signData["MD5 签名"] = md_5.toString();
+      signData["SHA1 签名"] = sha_1.toString();
+      signData["SHA256 签名"] = sha_256.toString();
+      certInfo['签名列表'].add(signData);
+    }
+    myLogger.i('读取证书信息成功: ${certInfo.toString()}');
+    return certInfo;
   }
 
 }

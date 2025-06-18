@@ -2,11 +2,11 @@ import 'package:apk_analyzer/utils/my_logger.dart';
 import 'package:archive/archive.dart';
 import 'dart:io';
 
-Future<String> extractFileWithZip(
+String extractFileWithZip(
   String apkPath,
   String resourcePath,
   String outputPath,
-) async {
+) {
   if (resourcePath.startsWith('/')) {
     resourcePath = resourcePath.substring(1);
   }
@@ -16,8 +16,8 @@ Future<String> extractFileWithZip(
     for (var file in archive) {
       if (file.isFile && file.name == resourcePath) {
         var outputFile = File('$outputPath/$resourcePath');
-        await outputFile.create(recursive: true);
-        await outputFile.writeAsBytes(file.readBytes() as List<int>);
+        outputFile.createSync(recursive: true);
+        outputFile.writeAsBytesSync(file.readBytes() as List<int>);
         return outputFile.path;
       }
     }
@@ -41,6 +41,8 @@ List<String> getFileList(String apkPath) {
             file.name.endsWith(".jar") ||
             file.name.endsWith(".dat") ||
             file.name.endsWith(".bin") ||
+            file.name.endsWith(".RSA") ||
+            file.name.endsWith(".DSA") ||
             file.name.startsWith("assets") ||
             file.name.startsWith("lib")) {
           fileList.add(file.name);

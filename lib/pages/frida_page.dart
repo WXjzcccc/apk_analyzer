@@ -264,9 +264,9 @@ class _FridaPageState extends State<FridaPage> {
         outputContent.add("APK未安装\n开始安装\n");
       });
       if (!await installApk(apkPath)) {
-        myLogger.e("安装失败");
+        myLogger.e("安装失败，请检查模拟器或真机是否连接");
         setState(() {
-          outputContent.add("安装失败\n");
+          outputContent.add("安装失败，请检查模拟器或真机是否连接\n");
           isRun = false;
         });
         return;

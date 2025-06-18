@@ -81,6 +81,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.19.1"
+  convert:
+    dependency: transitive
+    description:
+      name: convert
+      sha256: b30acd5944035672bc15c6b7a8b47d773e41e2f17de064350988c5d02adb1c68
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.2"
   cross_file:
     dependency: transitive
     description:
@@ -158,6 +166,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_json_view:
+    dependency: "direct main"
+    description:
+      name: flutter_json_view
+      sha256: "7acbb6768eccfbc4081bf87bb7ffbe628d6ccfcbdd51b1e713030c44aa3daf49"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.5"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -352,6 +368,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
+  pem:
+    dependency: transitive
+    description:
+      name: pem
+      sha256: "3dfb24524f805ad694ba3cdbb6387ab31ab661fdb8ea873052ed88487fcfef86"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.5"
+  petitparser:
+    dependency: transitive
+    description:
+      name: petitparser
+      sha256: "07c8f0b1913bcde1ff0d26e57ace2f3012ccbf2b204e070290dad3bb22797646"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.0"
+  pkcs7:
+    dependency: "direct main"
+    description:
+      name: pkcs7
+      sha256: "7acfea83d6cbf7a18eb812d6fc893652d4298849a5fd5d20208fea9976808072"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.6"
   platform:
     dependency: transitive
     description:
@@ -368,6 +408,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  pointycastle:
+    dependency: transitive
+    description:
+      name: pointycastle
+      sha256: "92aa3841d083cc4b0f4709b5c74fd6409a3e6ba833ffc7dc6a8fee096366acf5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
   posix:
     dependency: transitive
     description:

@@ -1,6 +1,7 @@
 import 'package:apk_analyzer/pages/about_page.dart';
 import 'package:apk_analyzer/pages/apk_info_page.dart';
 import 'package:apk_analyzer/pages/apk_table_page.dart';
+import 'package:apk_analyzer/pages/cert_info_page.dart';
 import 'package:apk_analyzer/pages/frida_page.dart';
 import 'package:apk_analyzer/utils/frida.dart';
 import 'package:apk_analyzer/utils/get_apk_info.dart';
@@ -85,6 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final List<Widget> _pages = [
     ApkInfoPage(key: ValueKey('ApkInfoPage')),
+    CertInfoPage(key: ValueKey('CertInfoPage')),
     ApkTablePage(key: ValueKey('ApkTablePage')),
     FridaPage(key: ValueKey('FridaPage')),
     AboutPage(key: ValueKey('AboutPage')),
@@ -114,6 +116,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     NavigationRailDestination(
                       icon: Icon(Icons.android),
                       label: Text('分析结果'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.credit_card),
+                      label: Text('签名信息'),
                     ),
                     NavigationRailDestination(
                       icon: Icon(Icons.list),
