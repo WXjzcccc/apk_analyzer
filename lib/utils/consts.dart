@@ -41,6 +41,11 @@ String _getFridaServerPath() {
   return '$toolPath\\$fridaServerName';
 }
 
+String _getUnFoundIconPath() {
+  String toolPath = _getToolPath();
+  return '$toolPath\\unfound_icon.png';
+}
+
 String localPath = Platform.resolvedExecutable.replaceAll(Platform.executable, '').replaceAll("\\build\\windows\\x64\\runner\\Debug", "");
 
 const fridaServerName = "frida-server-16.1.4-android-";
@@ -61,7 +66,7 @@ const easyFridaAttachCommand = '-p';
 const easyFridaPluginCommand = '-l';
 const easyFridaLogCommand = '-o';
 
-const unFoundIconPath = 'win_tools\\unfound_icon.png';
+final unFoundIconPath = _getUnFoundIconPath();
 
 final toolPath = _getToolPath();
 
