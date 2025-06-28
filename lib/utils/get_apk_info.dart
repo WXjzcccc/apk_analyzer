@@ -329,7 +329,9 @@ class GetApkInfo {
           }
         });
       });
-
+    }
+    if(apkinfo.launcherActivity == 'org.golang.app.GoNativeActivity'){
+      built = "Fyne（所有逻辑都在so当中）";
     }
     return built;
   }
