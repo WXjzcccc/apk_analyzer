@@ -61,6 +61,8 @@ const easyFridaAttachCommand = '-p';
 const easyFridaPluginCommand = '-l';
 const easyFridaLogCommand = '-o';
 
+const unFoundIconPath = 'win_tools\\unfound_icon.png';
+
 final toolPath = _getToolPath();
 
 final adbPath = _getAdbPath();
@@ -1309,6 +1311,13 @@ const builtInfo = {
       "app-service.js",
       "app-config.js",
       "app-view.js",
+    ],
+  },
+  "kivy":{
+    "soPath": [],
+    "soName": [
+      "libmain.so",
+      "libpython",
     ],
   }
 };

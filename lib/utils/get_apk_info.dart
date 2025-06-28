@@ -17,6 +17,7 @@ class GetApkInfo {
 
   GetApkInfo(String apkPath) {
     apkinfo.apkPath = apkPath;
+    apkinfo.iconPath = unFoundIconPath;
     fileList = getFileList(apkPath);
   }
 
@@ -84,6 +85,10 @@ class GetApkInfo {
     /*aapt对图标的解析比aapt2好，所以这边再调一次 */
     String apkPath = apkinfo.apkPath ?? '';
     String output = await _runAapt(apkPath);
+    if(output.isEmpty) {
+      myLogger.w('aapt命令执行失败，无法获取图标信息');
+      return;
+    }
     RegExp iconRegex = RegExp(r"application: label='[^']+' icon='([^']+)'");
     Match? iconMatch = iconRegex.firstMatch(output);
     if (iconMatch != null) {
@@ -361,7 +366,12 @@ class GetApkInfo {
       certData['序列号'] = certificate.serialNumber.toString();
       certData['有效期始'] = certificate.notBefore.toString();
       certData['有效期至'] = certificate.notAfter.toString();
-      certData['指纹'] = certificate.fingerprint.toString();
+      try{
+        certData['指纹'] = certificate.fingerprint.toString();
+      }catch(e){
+        myLogger.w("获取证书指纹失败: $e");
+        certData['指纹'] = "获取失败";
+      }
       certData['签名算法'] = certificate.digestAlgorithmID.name;
       certData['RSA-e'] = certificate.publicKey.publicExponent.toString();
       certData['RSA-n'] = certificate.publicKey.n.toString();
