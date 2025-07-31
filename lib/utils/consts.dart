@@ -28,7 +28,7 @@ String _getEasyFridaExePath() {
 
 String _getEasyFridaPluginPath() {
   String fridaPath = _getEasyFridaPath();
-  return '$fridaPath\\scripts\\plugins.list';
+  return '$fridaPath\\scripts\\plugins.json';
 }
 
 String _getAdbPath() {

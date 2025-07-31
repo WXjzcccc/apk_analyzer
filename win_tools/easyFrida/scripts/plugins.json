@@ -1,0 +1,50 @@
+{
+    "equals": {
+        "fileName": "equals.js",
+        "description": "判断比较的两个字符串"
+    },
+    "strcmp": {
+        "fileName": "strcmp.js",
+        "description": "判断比较的两个字符串(so层)"
+    },
+    "r0capture": {
+        "fileName": "r0capture.js",
+        "description": "肉丝大佬的绕过SSL抓包脚本(建议将输出重定向到文件)"
+    },
+    "javaEnc": {
+        "fileName": "javaEnc.js",
+        "description": "Java层加解密(取自fridaUiTools，优化增强)"
+    },
+    "event": {
+        "fileName": "event.js",
+        "description": "Java层点击事件(取自fridaUiTools)"
+    },
+    "database": {
+        "fileName": "sqlcipher.js",
+        "description": "Java层操作sqlcipher时使用的密钥(等待不断完善)"
+    },
+    "share": {
+        "fileName": "SharedPreferences.js",
+        "description": "看看从SharedPreferences中读取了哪些数据"
+    },
+    "sofileopen": {
+        "fileName": "file.js",
+        "description": "看看so打开了哪些文件"
+    },
+    "log": {
+        "fileName": "log.js",
+        "description": "查看java层和so层输出的日志"
+    },
+    "tracer": {
+        "fileName": "tracer.js",
+        "description": "查看指定类或方法的调用堆栈"
+    },
+    "bypass": {
+        "fileName": "bypass.js",
+        "description": "绕过一些常见的检测"
+    },
+    "register": {
+        "fileName": "register.js",
+        "description": "查看JNI动态注册的函数"
+    }
+}

@@ -11,13 +11,12 @@ List<Map<String,dynamic>> getPlugins(){
   String path = easyFridaPluginPath;
   File file = File(path);
   String data = file.readAsStringSync();
+  Map<String, dynamic> pluginMap = jsonDecode(data);
   List<Map<String,dynamic>> plugins = [];
-  List<String> pluginList = data.split("\n");
   int cnt = 0;
-  for(String plugin in pluginList){
-    List<String> temp = plugin.split(" ");
-    String name = temp.first;
-    String message = temp.last;
+  for(var plugin in pluginMap.entries){
+    String name = plugin.key;
+    String message = plugin.value['description'] ?? '无描述';
     plugins.add({
       "id":cnt,
       "title":name,
