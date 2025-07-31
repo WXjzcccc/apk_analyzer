@@ -1277,6 +1277,18 @@ const packedInfo = { //自己之前存特征的数据库不小心删了，这里
       r"com\\..+AddressablesAssetPack.+\\.apk$"
     ]
   },
+  "appguard.us加固": {
+    "sopath": [
+    ],
+    "soname": [
+      "libloader.so"
+    ],
+    "other": [
+    ],
+    "soregex": [
+      r"config\\..+\\.apk$"
+    ],
+  },
   "未知厂商": {
     "sopath": [
     ],
@@ -1324,5 +1336,12 @@ const builtInfo = {
       "libmain.so",
       "libpython",
     ],
-  }
+  },
+  "React-Native-查看/assets/index.android.bundle": {
+    "soPath": [],
+    "soName": [
+      "libreactnativejni.so",
+      "libreact_utils.so",
+    ],
+  },
 };
